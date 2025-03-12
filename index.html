@@ -1,0 +1,49 @@
+<html>
+<head>
+   <title>output 20 animal emoji dates please</title>
+   <script type="text/javascript">
+const distinctAnimalEmoji = ["🐒","🦧","🐶","🦊","🐈","🦁","🦄","🐮","🐷","🦒","🐘","🐭","🐹","🦔","🐻","🐨","🐼","🦃","🐓","🐣","🐦","🐧","🦢","🦩","🦚","🦜","🐸","🐢","🐍","🐳","🦭","🐟","🐠","🐙","🪼","🦑","🐌","🦋","🐝","🐞"];
+function printPoll(n) {
+   const selectedEmoji = shuffleEmoji(distinctAnimalEmoji, n);
+   const selectedDow = checkCheckboxes();
+   const outputDiv = document.getElementById("output");
+   if (selectedDow.includes(true)) {
+      outputDiv.innerText = getEmojiDates(selectedDow, selectedEmoji, 20).join("\n");
+   }
+}
+function checkCheckboxes() {
+   return Array.from(Array(7).keys()).map(n => document.getElementById(`dow${n}`).checked);
+}
+function shuffleEmoji(emojiArray, n) {
+   return emojiArray.map(value => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value).slice(0,n);
+}
+function getEmojiDates(selectedDow,selectedEmoji,n) {
+   const simpleFormat = new Intl.DateTimeFormat("en-US", {weekday: "long", month: "long", day: "numeric"});
+   const outputDates = [];
+   const day = new Date();
+   while (outputDates.length < n) {
+      if (selectedDow[day.getDay() % 7]) {
+         outputDates.push(`${selectedEmoji[outputDates.length]} ${simpleFormat.format(day)}`);
+      }
+      day.setDate(day.getDate() + 1);
+   }
+   return outputDates;
+}
+   </script>
+</head>
+<body>
+   <p>I regularly need to output the next 20 dates for a discord poll. but also i don't want to keep a bot maintained lol. choose what days of the week ya need</p>
+   <input type="checkbox" id="dow1" name="monday" value="1" /><label for="dow1">Monday</label><br />
+   <input type="checkbox" id="dow2" name="tuesday" value="2" /><label for="dow2">Tuesday</label><br />
+   <input type="checkbox" id="dow3" name="wednesday" value="3" /><label for="dow3">Wednesday</label><br />
+   <input type="checkbox" id="dow4" name="thursday" value="4" /><label for="dow4">Thursday</label><br />
+   <input type="checkbox" id="dow5" name="friday" value="5" /><label for="dow5">Friday</label><br />
+   <input type="checkbox" id="dow6" name="saturday" value="6" /><label for="dow6">Saturday</label><br />
+   <input type="checkbox" id="dow0" name="sunday" value="0" /><label for="dow0">Sunday</label><br />
+   <input type="submit" value="Output Some Emoji" onclick="printPoll()" /><br />
+   <pre id="output"></pre>
+
+</body>
+</html>
